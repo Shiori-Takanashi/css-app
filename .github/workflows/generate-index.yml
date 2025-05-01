@@ -1,8 +1,10 @@
 name: Generate Index
+# ← ここで明示的に書き込み権限を付与
+permissions:
+  contents: write
 
 on:
   push:
-    # ルートの .html（テンプレ・index以外）の更新を検知
     paths:
       - "*.html"
       - "templates/**"
@@ -11,28 +13,33 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # GITHUB_TOKEN を git push に使う設定（デフォルト true ですが念のため）
+          persist-credentials: true
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: "3.11"
 
-      - name: Install bs4
+      - name: Install dependencies
         run: pip install beautifulsoup4
 
       - name: Generate index.html
         run: python generate_index.py
 
-      - name: Commit & Push
+      - name: Configure Git remote for push
+        run: |
+          # トークン埋め込み型リモートURLに書き換え
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+
+      - name: Commit and push index.html
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
           git commit -m "Auto update index.html" || echo "No changes"
-          git push
-
-          # trigger
+          git push origin HEAD:main
