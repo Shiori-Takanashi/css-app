@@ -4,16 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>borer01</title>
+    <title>border編-01</title>
     <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            margin: 60px;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* 変更: 垂直方向中央揃え */
+            width: 100%;
+            height: 50%;
+            /* 調整: 高さを調整してh1とのスペースを作る */
+        }
+
         .box {
-            width: 50px;
-            height: 50px;
+            width: 200px;
+            height: 200px;
             background-color: black;
         }
 
         #box01 {
-            border-top-width: 10px;
+            border-top-width: 50px;
             border-right-width: 0px;
             border-bottom-width: 0px;
             border-style: solid;
@@ -23,7 +45,10 @@
 </head>
 
 <body>
-    <div class="box" id="box01"></div>
+    <h1>border-leftは指定してないのに線がある！</h1>
+    <main>
+        <div class="box" id="box01"></div>
+    </main>
 </body>
 
 </html>
